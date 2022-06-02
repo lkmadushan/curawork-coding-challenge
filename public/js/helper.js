@@ -6,12 +6,10 @@ function ajaxForm(formItems) {
   return form;
 }
 
-
-
 /**
- * 
+ *
  * @param {*} url route
- * @param {*} method POST or GET 
+ * @param {*} method POST or GET
  * @param {*} functionsOnSuccess Array of functions that should be called after ajax
  * @param {*} form for POST request
  */
@@ -57,31 +55,91 @@ function ajax(url, method, functionsOnSuccess, form) {
   });
 }
 
+function removeAcceptedConnection(userId) {
+  var functionsOnSuccess = [
+    [getAcceptedConnections, ['response']]
+  ];
 
-function exampleUseOfAjaxFunction(exampleVariable) {
-  // show skeletons
-  // hide content
+  ajax('/accepted-connections/' + userId, 'DELETE', functionsOnSuccess);
+}
 
+function deleteConnectionRequest(userId) {
+  var functionsOnSuccess = [
+    [getOutgoingConnections, ['response']]
+  ];
+
+  ajax('/outgoing-connections/' + userId, 'DELETE', functionsOnSuccess);
+}
+
+function acceptConnectionRequest(userId) {
   var form = ajaxForm([
-    ['exampleVariable', exampleVariable],
+    ['user_id', userId],
   ]);
 
   var functionsOnSuccess = [
-    [exampleOnSuccessFunction, [exampleVariable, 'response']]
+    [getIncomingConnections, ['response']]
   ];
 
-  // POST 
-  ajax('/example_route', 'POST', functionsOnSuccess, form);
-
-  // GET
-  ajax('/example_route/' + exampleVariable, 'POST', functionsOnSuccess);
+  ajax('/incoming-connections', 'POST', functionsOnSuccess, form);
 }
 
-function exampleOnSuccessFunction(exampleVariable, response) {
-  // hide skeletons
-  // show content
+function sendConnectionRequest(userId) {
+  var form = ajaxForm([
+    ['user_id', userId],
+  ]);
 
-  console.log(exampleVariable);
-  console.table(response);
-  $('#content').html(response['content']);
+  var functionsOnSuccess = [
+    [getSuggestedConnections, ['response']]
+  ];
+
+  ajax('/suggested-connections', 'POST', functionsOnSuccess, form);
+}
+
+function getAcceptedConnections() {
+  $('#connections_in_common_skeleton').removeClass('d-none');
+  $('#content').addClass('d-none');
+
+  var functionsOnSuccess = [
+    [connectionsOnSuccess, ['response']]
+  ];
+
+  ajax('/accepted-connections', 'GET', functionsOnSuccess);
+}
+
+function getIncomingConnections() {
+    $('#connections_in_common_skeleton').removeClass('d-none');
+    $('#content').addClass('d-none');
+
+    var functionsOnSuccess = [
+        [connectionsOnSuccess, ['response']]
+    ];
+
+    ajax('/incoming-connections', 'GET', functionsOnSuccess);
+}
+
+function getOutgoingConnections() {
+    $('#connections_in_common_skeleton').removeClass('d-none');
+    $('#content').addClass('d-none');
+
+    var functionsOnSuccess = [
+        [connectionsOnSuccess, ['response']]
+    ];
+
+    ajax('/outgoing-connections', 'GET', functionsOnSuccess);
+}
+
+function getSuggestedConnections() {
+  $('#connections_in_common_skeleton').removeClass('d-none');
+  $('#content').addClass('d-none');
+
+  var functionsOnSuccess = [
+    [connectionsOnSuccess, ['response']]
+  ];
+
+  ajax('/suggested-connections', 'GET', functionsOnSuccess);
+}
+
+function connectionsOnSuccess(response) {
+    $('#connections_in_common_skeleton').addClass('d-none');
+    $('#content').removeClass('d-none').html(response['content']);
 }

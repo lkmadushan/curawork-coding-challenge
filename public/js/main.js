@@ -3,9 +3,12 @@ var contentId = 'content';
 var skipCounter = 0;
 var takeAmount = 10;
 
-
 function getRequests(mode) {
-  // your code here...
+    if (mode === 'sent') {
+        getOutgoingConnections()
+    } else {
+        getIncomingConnections()
+    }
 }
 
 function getMoreRequests(mode) {
@@ -14,7 +17,7 @@ function getMoreRequests(mode) {
 }
 
 function getConnections() {
-  // your code here...
+  getAcceptedConnections()
 }
 
 function getMoreConnections() {
@@ -32,7 +35,7 @@ function getMoreConnectionsInCommon(userId, connectionId) {
 }
 
 function getSuggestions() {
-  // your code here...
+    getSuggestedConnections()
 }
 
 function getMoreSuggestions() {
@@ -40,22 +43,22 @@ function getMoreSuggestions() {
   // your code here...
 }
 
-function sendRequest(userId, suggestionId) {
-  // your code here...
+function sendRequest(userId) {
+  sendConnectionRequest(userId)
 }
 
-function deleteRequest(userId, requestId) {
-  // your code here...
+function deleteRequest(userId) {
+  deleteConnectionRequest(userId)
 }
 
-function acceptRequest(userId, requestId) {
-  // your code here...
+function acceptRequest(userId) {
+  acceptConnectionRequest(userId)
 }
 
-function removeConnection(userId, connectionId) {
-  // your code here...
+function removeConnection(userId) {
+  removeAcceptedConnection(userId)
 }
 
 $(function () {
-  //getSuggestions();
+  getSuggestions();
 });
